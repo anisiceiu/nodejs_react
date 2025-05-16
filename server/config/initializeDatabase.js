@@ -1,21 +1,10 @@
-const sql = require('mssql');
-require('dotenv').config();
-
-const config = {
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  server: process.env.DB_SERVER,
-  database: process.env.DB_DATABASE,
-  options: {
-    encrypt: false,
-    trustServerCertificate: true,
-  }
-};
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+const { sql, poolPromise }  = require('./db');
 
 async function initializeDatabase() {
   try {
     console.log('Connecting to database...');
-    const pool = await sql.connect(config);
+    const pool = await poolPromise;
 
     // Create Users table
     await pool.request().query(`
